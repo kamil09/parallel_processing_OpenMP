@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <time.h>
 #include <omp.h>
-#include "myTime.cpp"
 
 int main2(int argc, char* argv[])
 {

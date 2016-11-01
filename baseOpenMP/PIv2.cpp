@@ -3,7 +3,6 @@
 #include <time.h>
 #include <omp.h>
 #include <iostream>
-#include "myTime.cpp"
 
 int main3(int argc, char* argv[])
 {

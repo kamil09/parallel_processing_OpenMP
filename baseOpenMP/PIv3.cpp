@@ -3,10 +3,10 @@
 #include <time.h>
 #include <omp.h>
 #include <iostream>
-#include "myTime.cpp"
+#include <windows.h>
 //SUMY CZEŚCIOWE
 
-int main(int argc, char* argv[])
+int main4(int argc, char* argv[])
 {
 	long long num_steps = 100000000;
 	double step;
@@ -37,8 +37,12 @@ int main(int argc, char* argv[])
    //WERSJA 2:
    #pragma omp parallel shared(sumTable) private(x)
    {
-      int th_num = omp_get_thread_num();
-      #pragma omp for
+	   int th_num = omp_get_thread_num();
+	   //HANDLE thread_handler = GetCurrentThread();
+	   //DWORD_PTR mask = (1 << (th_num % threads));
+	   //DWORD_PTR result = SetThreadAffinityMask(thread_handler, mask);
+      
+	  #pragma omp for
       for (i=0; i<num_steps; i++)
       {
          x = (i + .5)*step;

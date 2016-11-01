@@ -41,5 +41,11 @@
     <ClCompile Include="..\..\PIv3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Other.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Optimal_with_mask.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

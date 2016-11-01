@@ -1,7 +1,9 @@
-﻿  Generating code
-  0 of 5 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+﻿  Optimal_with_mask.cpp
+Optimal_with_mask.cpp(19): warning C4101: 'x': unreferenced local variable
+  Generating code
+  2 of 7 functions (28.6%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
   Finished generating code
+    0 functions had inline decision re-evaluated but remain unchanged
   parallel_programming_1.vcxproj -> C:\Users\no-one\parallel_processing_OpenMP\baseOpenMP\parallel_programming_1\Release\parallel_programming_1.exe
   parallel_programming_1.vcxproj -> C:\Users\no-one\parallel_processing_OpenMP\baseOpenMP\parallel_programming_1\Release\parallel_programming_1.pdb (Full PDB)
