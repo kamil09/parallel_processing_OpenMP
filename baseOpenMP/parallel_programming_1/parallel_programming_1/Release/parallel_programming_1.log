@@ -1,0 +1,7 @@
+﻿  Generating code
+  0 of 5 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  parallel_programming_1.vcxproj -> C:\Users\no-one\parallel_processing_OpenMP\baseOpenMP\parallel_programming_1\Release\parallel_programming_1.exe
+  parallel_programming_1.vcxproj -> C:\Users\no-one\parallel_processing_OpenMP\baseOpenMP\parallel_programming_1\Release\parallel_programming_1.pdb (Full PDB)
