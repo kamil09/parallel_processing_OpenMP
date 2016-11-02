@@ -6,9 +6,9 @@
 #include <windows.h>
 //Długość lini w pamięci podręcznej
 
-int mainx(int argc, char* argv[])
+int mainLine(int argc, char* argv[])
 {
-	long long num_steps = 200000000;
+	long long num_steps = 100000000;
 	double step;
 
 	time_t start, stop;
@@ -16,41 +16,63 @@ int mainx(int argc, char* argv[])
 	int i;
 	step = 1./(double)num_steps;
 
-	const int threads = 2;
+   const int threads = 2;
    const int calc_count = 20;
    double times[calc_count];
    volatile double sumTable[calc_count+2];
    omp_set_num_threads(2);
 
-   for (i=0;i<calc_count;i++){
-      sumTable[i]=0;
-      sumTable[i+1]=0;
-      sum=0;
-	  start = clock();
+   //WERSJA 1:
+   /*
+   for (i = 0; i < calc_count; i++) {
+	   sumTable[i] = 0;
+	   sumTable[i + 1] = 0;
+	   sum = 0;
+	   start = clock();
 
-      #pragma omp parallel private(x)
-      {
-		  int th_num = omp_get_thread_num();
-		  HANDLE thread_handler = GetCurrentThread();
-		  DWORD_PTR mask = (1 << (th_num % threads));
-		  DWORD_PTR result = SetThreadAffinityMask(thread_handler, mask);
+	   #pragma omp parallel private(x)
+	   {
+		   int th_num = omp_get_thread_num();
+		  #pragma omp for schedule(static,1)
+		  for (int j=0; j<num_steps; j++)
+		  {
+			 x = (j + .5)*step;
+			 sumTable[i+th_num] += 4.0/(1.+ x*x);
+		  }
+	   }
 
-         #pragma omp for schedule(static,1)
-         for (int j=0; j<num_steps; j++)
-         {
-            x = (j + .5)*step;
-            sumTable[i+th_num] += 4.0/(1.+ x*x);
-         }
-      }
+	   sum = sumTable[i]+sumTable[i+1];
 
-      sum = sumTable[i]+sumTable[i+1];
+	   pi = sum*step;
+	   stop = clock();
+	   times[i] = ((double)stop-start)/CLOCKS_PER_SEC;
+	}
+   for (i = 0; i<calc_count; i++) std::cout << times[i] << std::endl;
+	*/
 
-      pi = sum*step;
-	  stop = clock();
-      times[i] = ((double)stop-start)/CLOCKS_PER_SEC;
-   }
+	
+	//WERSJA 2
+   
+	for (i = 0; i < calc_count; i++) {
+		sumTable[i] = 0;
+		sumTable[i + 1] = 0;
+		  #pragma omp parallel private(start,stop)
+		  {
+			start = clock();
+			  int th_num = omp_get_thread_num();
+			  for (int j = 0; j<num_steps; j++)
+			  {
+				  x = (j + .5)*step;
+				  sumTable[i + th_num] += 4.0 / (1. + x*x);
+			  }
 
-   for (i=0;i<calc_count;i++) std::cout << times[i] << std::endl;
+			  pi = sumTable[i + th_num]*step;
+			  stop = clock();
+			  times[i + th_num] = ((double)stop - start) / CLOCKS_PER_SEC;
+		  }
+		  printf("time1: %f,time2: %f\n", times[i], times[i+1]);
+	   }
+    
 
 	printf("Wartosc liczby PI wynosi %15.12f\n",pi);
 	getchar();
@@ -58,49 +80,54 @@ int mainx(int argc, char* argv[])
 }
 
 /**
-   WINDOWS: (wykorzystując słowa od siebie oddalone o 1 na wypadek gdyby krawędź lini wypadła w środku słowa)
-    1.455 XX
-	1.445 XX
-	2.067
-	2.018
-	2.023
-	2.052
-	2.028
-	2.028
-	1.447 XX
-	1.446 XX
-	2.069
-	2.012
-	2.034
-	2.054
-	2.027
-	2.029
-	1.448 XX
-	1.447 XX
-	2.061
-	2.019
+WERSJA 2:
+time1: 2.795000,time2: 2.637000
+time1: 3.695000,time2: 3.713000
+time1: 3.730000,time2: 3.730000
+time1: 3.693000,time2: 3.700000
+time1: 3.190000,time2: 3.230000
+time1: 1.832000,time2: 1.904000 XXX
+time1: 3.364000,time2: 3.390000
+time1: 3.493000,time2: 3.508000
+time1: 3.348000,time2: 3.312000
+time1: 3.314000,time2: 3.328000
+time1: 3.525000,time2: 3.530000
+time1: 3.571000,time2: 3.573000
+time1: 3.205000,time2: 3.226000
+time1: 1.972000,time2: 2.009000 XXX
+time1: 3.563000,time2: 3.579000
+time1: 3.423000,time2: 3.430000
+time1: 3.522000,time2: 3.516000
+time1: 3.448000,time2: 3.473000
+time1: 3.197000,time2: 3.200000
+time1: 2.916000,time2: 2.951000
+
 
    WINDOWS:
-	2.011
-	1.449 XXX
-	1.986
-	2.042
-	1.964
-	1.982
-	1.983
-	1.981
-	1.978
-	1.447 XXX
-	1.984
-	2.055
-	1.958
-	1.98
-	1.97
-	1.974
-	1.99
-	1.45 XXX
-	1.984
-	2.067
+	1.084
+	0.549 XXX
+	0.777
+	0.749
+	0.738
+	0.759
+	0.689
+	0.653
+	0.699
+	0.48  XXX 
+	0.854
+	0.799
+	0.796
+	0.775
+	0.804
+	0.721
+	0.812
+	0.562 XXX
+	0.702
+	0.719
 
 	Długość lini: 8słów, double: 8B => 64B
+   
+   WERSJA 2:
+	
+   
    */

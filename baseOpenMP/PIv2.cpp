@@ -4,7 +4,7 @@
 #include <omp.h>
 #include <iostream>
 
-int main3(int argc, char* argv[])
+int main2(int argc, char* argv[])
 {
 	long long num_steps = 100000000;
 	double step;
@@ -33,10 +33,7 @@ int main3(int argc, char* argv[])
 }
 
 /**
-   operacji: 1000000000
    wynik: poprawny
-   time: 3.72s
-
    operacji: 100000000
-   time: 0.37s
+   time: 0.395000s
    */

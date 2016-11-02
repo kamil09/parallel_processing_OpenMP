@@ -3,7 +3,7 @@
 #include <time.h>
 #include <omp.h>
 
-int main2(int argc, char* argv[])
+int main1(int argc, char* argv[])
 {
 	long long num_steps = 100000000;
 	double step;
@@ -16,11 +16,12 @@ int main2(int argc, char* argv[])
 	step = 1./(double)num_steps;
 	start = clock();
 
-	#pragma omp parallel for private(x)
+	//#pragma omp parallel for private(x)
+	//#pragma omp parallel for
 	for (i=0; i<num_steps; i++)
 	{
 		x = (i + .5)*step;
-		#pragma omp atomic
+		//#pragma omp atomic
 		sum += 4.0/(1.+ x*x);
 	}
 
@@ -36,7 +37,7 @@ int main2(int argc, char* argv[])
 	Podstawowy kod:
 	Wynik: poprawny
 	operacji: 100000000
-	time: 0.72s
+	time: 0.739000s
 */
 
 /**
@@ -45,7 +46,7 @@ int main2(int argc, char* argv[])
 	//Niepoprawne, ponieważ zmienna sum jest współdzielona, a nie zapewniono wyłączoności dostępu przy operacji zapisie, zmienna x jest również współdzielona, ale mogłaby być lokalna
 	operacji: 100000000
 	wynik : niepoprawny
-	time: 2.13s
+	time: 0.576000
 */
 
 /**
@@ -53,7 +54,7 @@ int main2(int argc, char* argv[])
 	x jako zmienna lokalna
 	wynik: niepoprawny
 	operacji: 100000000
-	time: 0.52s
+	time: 0.555000s
 */
 
 /**
@@ -61,5 +62,5 @@ int main2(int argc, char* argv[])
 	Dodanie wyrektywy atomic
 	wynik: poprawny
 	operacji: 100000000
-	time: 9.196000s
+	time: 6.537000
 */

@@ -6,7 +6,7 @@
 #include <windows.h>
 //SUMY CZEŚCIOWE
 
-int main4(int argc, char* argv[])
+int main3(int argc, char* argv[])
 {
 	long long num_steps = 100000000;
 	double step;
@@ -18,7 +18,7 @@ int main4(int argc, char* argv[])
 	int i;
 	step = 1./(double)num_steps;
 
-   const int threads = 16;
+   const int threads = 4;
    volatile double sumTable[threads];
    omp_set_num_threads(threads);
    for (i=0;i<threads;i++) sumTable[i]=0;
@@ -26,22 +26,19 @@ int main4(int argc, char* argv[])
    start = clock();
 
    // WERSJA 1:
-   /*
 	 #pragma omp parallel for shared(sumTable) private(x)
     for (i=0; i<num_steps; i++)
     {
 	 	x = (i + .5)*step;
         sumTable[omp_get_thread_num()] += 4.0/(1.+ x*x);
-    }*/
+    }
 
-   //WERSJA 2:
+   //WERSJA 2: 
+   /*
    #pragma omp parallel shared(sumTable) private(x)
    {
-	   int th_num = omp_get_thread_num();
-	   //HANDLE thread_handler = GetCurrentThread();
-	   //DWORD_PTR mask = (1 << (th_num % threads));
-	   //DWORD_PTR result = SetThreadAffinityMask(thread_handler, mask);
-      
+	  int th_num = omp_get_thread_num();
+	   
 	  #pragma omp for
       for (i=0; i<num_steps; i++)
       {
@@ -49,7 +46,7 @@ int main4(int argc, char* argv[])
          sumTable[th_num] += 4.0/(1.+ x*x);
       }
 
-   }
+   }*/
 
    #pragma omp parallel for reduction(+:sum)
    for (i=0;i<threads;i++) sum += sumTable[i];
@@ -65,16 +62,10 @@ int main4(int argc, char* argv[])
 /**
    WERSJA 1:
    operacji: 100000000
-   wątki 2 : 1.39s
-   wątki 4 : 1.33s
-   wątki 8 : 1.16s
-   wątki 16: 0.86s
+   wątki 4 : 1.428000s
    */
 
 /**
    WERSJA 2:
-   wątki 2 : 0.50s
-   wątki 4 : 0.50s
-   wątki 8 : 0.51s
-   wątki 16: 0.49s
+   wątki 4 : 0.498000s
 */
