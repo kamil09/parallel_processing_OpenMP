@@ -5,10 +5,10 @@
 #include <iostream>
 #include <windows.h>
 
-int main(int argc, char* argv[])
+int mainO(int argc, char* argv[])
 {
 	long long num_steps = 100000000;
-	const int thread = 4;
+	const int thread = 8;
 	const int procs_num = omp_get_num_procs();
 	double step;
 	omp_set_num_threads(thread);
@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
 	{
 		int th_num = omp_get_thread_num();
 		HANDLE thread_handler = GetCurrentThread();
-		DWORD_PTR mask = (1 << (th_num/2 % procs_num));
+		DWORD_PTR mask = (1 << (th_num % procs_num));
 		
 		DWORD_PTR result = SetThreadAffinityMask(thread_handler, mask);
 		#pragma omp for
@@ -59,10 +59,10 @@ Po 2 do 1 rdzenia
 
 1 do 1
 	threads: 4
-	time: 0.428000
+	time: 0.427000
 
 	threads: 8
-	time: 0.411000
+	time: 0.414000
 
 */
 

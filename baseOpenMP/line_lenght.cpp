@@ -6,7 +6,7 @@
 #include <windows.h>
 //Długość lini w pamięci podręcznej
 
-int mainLine(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
 	long long num_steps = 100000000;
 	double step;
@@ -60,6 +60,7 @@ int mainLine(int argc, char* argv[])
 		  {
 			start = clock();
 			  int th_num = omp_get_thread_num();
+			  
 			  for (int j = 0; j<num_steps; j++)
 			  {
 				  x = (j + .5)*step;

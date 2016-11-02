@@ -1,4 +1,7 @@
-﻿  Optimal_with_mask.cpp
+﻿  line_lenght.cpp
+..\..\line_lenght.cpp(14): warning C4101: 'start': unreferenced local variable
+..\..\line_lenght.cpp(14): warning C4101: 'stop': unreferenced local variable
+  Optimal_with_mask.cpp
 Optimal_with_mask.cpp(19): warning C4101: 'x': unreferenced local variable
   Generating code
   2 of 7 functions (28.6%) were compiled, the rest were copied from previous compilation.
