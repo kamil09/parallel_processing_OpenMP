@@ -1,0 +1,8 @@
+﻿  main.cpp
+  Generating code
+  2 of 15 functions (13.3%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  matrix.vcxproj -> C:\Users\no-one\parallel_processing_OpenMP\matrixMul\matrix\Release\matrix.exe
+  matrix.vcxproj -> C:\Users\no-one\parallel_processing_OpenMP\matrixMul\matrix\Release\matrix.pdb (Full PDB)
