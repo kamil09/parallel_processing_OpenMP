@@ -91,7 +91,7 @@ void multiply_matrices_IJK()
 void multiply_matrices_IJK_IKJ()
 {
 	//DZIA£A pmiêtaæ, ¿e ROWS,COLUMNS %r musi == 0  (musi byæ mo¿liwoœæ podziau macierzy na grupy)
-	int r = 50;
+	int r = 10;
 	#pragma omp parallel for
 	for (int i = 0; i < ROWS; i+=r) {
 		for (int j = 0; j < COLUMNS; j+=r) {
