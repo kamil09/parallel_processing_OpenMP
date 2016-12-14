@@ -16,12 +16,12 @@ int main1(int argc, char* argv[])
 	step = 1./(double)num_steps;
 	start = clock();
 
-	//#pragma omp parallel for private(x)
-	//#pragma omp parallel for
+	//#pragma omp parallel for private(x) //+=WERSJA 2
+	//#pragma omp parallel for //+=WERSJA 1
 	for (i=0; i<num_steps; i++)
 	{
 		x = (i + .5)*step;
-		//#pragma omp atomic
+		//#pragma omp atomic //+=WERSJA 3
 		sum += 4.0/(1.+ x*x);
 	}
 

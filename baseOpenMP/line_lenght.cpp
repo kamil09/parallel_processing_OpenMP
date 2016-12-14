@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 	   sum = 0;
 	   start = clock();
 
-	   #pragma omp parallel private(x)
+	   #pragma omp parallel private(x) shared(sumTable)
 	   {
 		   int th_num = omp_get_thread_num();
 		  #pragma omp for schedule(static,1)
@@ -50,17 +50,17 @@ int main(int argc, char* argv[])
    for (i = 0; i<calc_count; i++) std::cout << times[i] << std::endl;
 	*/
 
-	
+
 	//WERSJA 2
-   
+
 	for (i = 0; i < calc_count; i++) {
 		sumTable[i] = 0;
 		sumTable[i + 1] = 0;
-		  #pragma omp parallel private(start,stop)
+		  #pragma omp parallel private(start,stop) shared(sumTable)
 		  {
 			start = clock();
 			  int th_num = omp_get_thread_num();
-			  
+
 			  for (int j = 0; j<num_steps; j++)
 			  {
 				  x = (j + .5)*step;
@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
 		  }
 		  printf("time1: %f,time2: %f\n", times[i], times[i+1]);
 	   }
-    
+
 
 	printf("Wartosc liczby PI wynosi %15.12f\n",pi);
 	getchar();
@@ -114,7 +114,7 @@ time1: 2.916000,time2: 2.951000
 	0.689
 	0.653
 	0.699
-	0.48  XXX 
+	0.48  XXX
 	0.854
 	0.799
 	0.796
@@ -127,8 +127,3 @@ time1: 2.916000,time2: 2.951000
 	0.719
 
 	Długość lini: 8słów, double: 8B => 64B
-   
-   WERSJA 2:
-	
-   
-   */

@@ -33,12 +33,11 @@ int main3(int argc, char* argv[])
         sumTable[omp_get_thread_num()] += 4.0/(1.+ x*x);
     }
 
-   //WERSJA 2: 
+   //WERSJA 2:
    /*
    #pragma omp parallel shared(sumTable) private(x)
    {
 	  int th_num = omp_get_thread_num();
-	   
 	  #pragma omp for
       for (i=0; i<num_steps; i++)
       {

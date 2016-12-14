@@ -33,6 +33,7 @@ int main2(int argc, char* argv[])
 }
 
 /**
+	Suma pewnątrz wątku jest jako prywatna zmienna, ale na końcu jest scalana ze wszystkich wątków
    wynik: poprawny
    operacji: 100000000
    time: 0.395000s
