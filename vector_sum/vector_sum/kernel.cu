@@ -50,12 +50,11 @@ __global__ void sumKernelStr3(float *c, float *a) {
 	sdata[tid] = a[i];
 	__syncthreads();
 
-	for (unsigned int odstep = blockDim.x / 2; odstep>0; odstep/=2) {
+	for (unsigned int odstep = blockDim.x / 2; odstep > 0; odstep /= 2) {
 		if (tid < odstep) sdata[tid] += sdata[tid + odstep];
-		
-		__syncthreads();
-	}
 
+		__syncthreads();
+	}
 	if (tid == 0) c[blockIdx.x] = sdata[0];
 }
 
