@@ -12,7 +12,7 @@ const int block_size = 1024;
 cudaError_t sumWithCuda(float *c, float *a, unsigned int size, int type);
 
 __global__ void sumKernelStr1(float *c, float *a){
-	__shared__ float sdata[arraySize];
+	__shared__ float sdata[block_size];
 	unsigned int tid = threadIdx.x;
 	unsigned int i = blockIdx.x * blockDim.x + threadIdx.x;
 
@@ -26,7 +26,7 @@ __global__ void sumKernelStr1(float *c, float *a){
 }
 
 __global__ void sumKernelStr2(float *c, float*a) {
-	__shared__ float sdata[arraySize];
+	__shared__ float sdata[block_size];
 	unsigned int tid = threadIdx.x;
 	unsigned int i = blockIdx.x * blockDim.x + threadIdx.x;
 
