@@ -8,7 +8,7 @@
 #include <stdlib.h>
 
 const int arraySize = 2048*4;
-const int block_size = 1024;
+const int block_size = 512;
 cudaError_t sumWithCuda(float *c, float *a, unsigned int size, int type);
 
 template <int BLOCK_SIZE> __global__ void sumKernelStr1(float *c, float *a){
@@ -75,6 +75,8 @@ int main()
     }
 	//for (int i = 0; i < arraySize; i++) printf("+%f", a[i]);
     printf("=%f\n",c[0]);
+	for (int i = 1; i < arraySize; i++) a[0] += a[i];
+	if (a[0] != c[0]) printf("DUPA! %f!=%f",a[0],c[0]);
 
     // cudaDeviceReset must be called before exiting in order for profiling and
     // tracing tools such as Nsight and Visual Profiler to show complete traces.
@@ -111,12 +113,16 @@ cudaError_t sumWithCuda(float *c, float *a, unsigned int size, int type)
 		exit(EXIT_SUCCESS);
 	}
 	if (cudaStatus != cudaSuccess) printf("cudaGetDeviceProperties returned error code %d, line(%d)\n", cudaStatus, __LINE__);
-	else printf("GPU Device %d: \"%s\" with compute capability %d.%d MP:%d TH_MUL:%d TH:%d WARP:%d\n\n", 0, 
-		deviceProp.name, deviceProp.major, deviceProp.minor, deviceProp.multiProcessorCount, deviceProp.maxThreadsPerMultiProcessor, deviceProp.maxThreadsPerBlock, deviceProp.warpSize);
+	else printf("GPU Device %d: \"%s\" with compute capability %d.%d MP:%d TH_MUL:%d TH:%d WARP:%d SH_MEM_BLOCK:%d\n\n", 0, 
+		deviceProp.name, deviceProp.major, deviceProp.minor, deviceProp.multiProcessorCount, deviceProp.maxThreadsPerMultiProcessor, deviceProp.maxThreadsPerBlock, deviceProp.warpSize, deviceProp.sharedMemPerBlock);
 	
+	int threads = size;
+	if (size>block_size) threads = block_size;
+	//printf("%d\n",threads);
+	int grid =size/threads;
 
     // Allocate GPU buffers for 2 vectors (1 input, 1 output).
-    cudaStatus = cudaMalloc((void**)&dev_c, 1 * sizeof(float));
+    cudaStatus = cudaMalloc((void**)&dev_c, size / threads * sizeof(float));
     if (cudaStatus != cudaSuccess) {
         fprintf(stderr, "cudaMalloc failed!");
         goto Error;
@@ -134,11 +140,7 @@ cudaError_t sumWithCuda(float *c, float *a, unsigned int size, int type)
         fprintf(stderr, "cudaMemcpy failed!");
         goto Error;
     }
-	int threads = size;
-	if(size>block_size) threads = block_size;
-	//printf("%d\n",threads);
-	dim3 grid(size / threads);
-	// Launch a kernel on the GPU with one thread for each element.
+	
 
 	// Allocate CUDA events that we'll use for timing
 	cudaEvent_t start;
@@ -153,11 +155,22 @@ cudaError_t sumWithCuda(float *c, float *a, unsigned int size, int type)
 		fprintf(stderr, "Failed to record start event (error code %s)!\n", cudaGetErrorString(cudaStatus));
 		exit(EXIT_FAILURE);
 	}
-	int iter = 30000;
+	int iter = 1;
 	for (int i = 0; i < iter; i++) {
-		if (type == 1)sumKernelStr1<block_size><< <grid, threads >> > (dev_c, dev_a);
+		if (type == 1)sumKernelStr1<block_size> << <grid, threads >> > (dev_c, dev_a);
 		if (type == 2)sumKernelStr2<block_size><< <grid, threads >> > (dev_c, dev_a);
 		if (type == 3)sumKernelStr3<block_size><< <grid, threads >> > (dev_c, dev_a);
+		sumKernelStr1<block_size> << <grid, threads >> > (dev_c, dev_a);
+		while (grid > 1) {
+			if (grid > block_size) grid /= block_size;
+			else {
+				threads = grid;
+				grid = 1;
+			}
+			if (type == 1)sumKernelStr1<block_size> << <grid, threads >> > (dev_c, dev_c);
+			if (type == 2)sumKernelStr2<block_size> << <grid, threads >> > (dev_c, dev_c);
+			if (type == 3)sumKernelStr3<block_size> << <grid, threads >> > (dev_c, dev_c);
+		}
 	}
 
     // Check for any errors launching the kernel
