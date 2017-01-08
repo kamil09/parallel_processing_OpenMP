@@ -11,8 +11,8 @@ const int arraySize = 2048*4;
 const int block_size = 1024;
 cudaError_t sumWithCuda(float *c, float *a, unsigned int size, int type);
 
-__global__ void sumKernelStr1(float *c, float *a){
-	__shared__ float sdata[block_size];
+template <int BLOCK_SIZE> __global__ void sumKernelStr1(float *c, float *a){
+	__shared__ float sdata[BLOCK_SIZE];
 	unsigned int tid = threadIdx.x;
 	unsigned int i = blockIdx.x * blockDim.x + threadIdx.x;
 
@@ -25,8 +25,8 @@ __global__ void sumKernelStr1(float *c, float *a){
 	if (tid == 0) c[blockIdx.x] = sdata[0];
 }
 
-__global__ void sumKernelStr2(float *c, float*a) {
-	__shared__ float sdata[block_size];
+template <int BLOCK_SIZE> __global__ void sumKernelStr2(float *c, float*a) {
+	__shared__ float sdata[BLOCK_SIZE];
 	unsigned int tid = threadIdx.x;
 	unsigned int i = blockIdx.x * blockDim.x + threadIdx.x;
 
@@ -42,8 +42,8 @@ __global__ void sumKernelStr2(float *c, float*a) {
 	if (tid == 0) c[blockIdx.x] = sdata[0];
 }
 
-__global__ void sumKernelStr3(float *c, float *a) {
-	__shared__ float sdata[arraySize];
+template <int BLOCK_SIZE> __global__ void sumKernelStr3(float *c, float *a) {
+	__shared__ float sdata[BLOCK_SIZE];
 	unsigned int tid = threadIdx.x;
 	unsigned int i = blockIdx.x * blockDim.x + threadIdx.x;
 
@@ -155,9 +155,9 @@ cudaError_t sumWithCuda(float *c, float *a, unsigned int size, int type)
 	}
 	int iter = 30000;
 	for (int i = 0; i < iter; i++) {
-		if (type == 1)sumKernelStr1 << <grid, threads >> > (dev_c, dev_a);
-		if (type == 2)sumKernelStr2 << <grid, threads >> > (dev_c, dev_a);
-		if (type == 3)sumKernelStr3 << <grid, threads >> > (dev_c, dev_a);
+		if (type == 1)sumKernelStr1<block_size><< <grid, threads >> > (dev_c, dev_a);
+		if (type == 2)sumKernelStr2<block_size><< <grid, threads >> > (dev_c, dev_a);
+		if (type == 3)sumKernelStr3<block_size><< <grid, threads >> > (dev_c, dev_a);
 	}
 
     // Check for any errors launching the kernel
