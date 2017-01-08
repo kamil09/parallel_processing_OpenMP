@@ -135,10 +135,25 @@ cudaError_t sumWithCuda(float *c, float *a, unsigned int size, int type)
 	dim3 grid(size / threads);
 	// Launch a kernel on the GPU with one thread for each element.
 
-    if(type==1)sumKernelStr1<<<grid, threads >>>(dev_c, dev_a);
-	if (type == 2)sumKernelStr2 << <grid, threads >> >(dev_c, dev_a);
-	if (type == 3)sumKernelStr3<< <grid, threads >> >(dev_c, dev_a);
-
+	// Allocate CUDA events that we'll use for timing
+	cudaEvent_t start;
+	cudaEvent_t stop;
+	if ((cudaStatus = cudaEventCreate(&start)) != cudaSuccess){
+		fprintf(stderr, "Failed to create start event (error code %s)!\n", cudaGetErrorString(cudaStatus));
+		exit(EXIT_FAILURE);}
+	if ((cudaStatus = cudaEventCreate(&stop)) != cudaSuccess){
+		fprintf(stderr, "Failed to create stop event (error code %s)!\n", cudaGetErrorString(cudaStatus));
+		exit(EXIT_FAILURE);}
+	if ((cudaStatus = cudaEventRecord(start, NULL)) != cudaSuccess){
+		fprintf(stderr, "Failed to record start event (error code %s)!\n", cudaGetErrorString(cudaStatus));
+		exit(EXIT_FAILURE);
+	}
+	int iter = 30000;
+	for (int i = 0; i < iter; i++) {
+		if (type == 1)sumKernelStr1 << <grid, threads >> > (dev_c, dev_a);
+		if (type == 2)sumKernelStr2 << <grid, threads >> > (dev_c, dev_a);
+		if (type == 3)sumKernelStr3 << <grid, threads >> > (dev_c, dev_a);
+	}
 
     // Check for any errors launching the kernel
     cudaStatus = cudaGetLastError();
@@ -146,7 +161,29 @@ cudaError_t sumWithCuda(float *c, float *a, unsigned int size, int type)
         fprintf(stderr, "addKernel launch failed: %s\n", cudaGetErrorString(cudaStatus));
         goto Error;
     }
-    
+   
+	if ((cudaStatus = cudaEventRecord(stop, NULL)) != cudaSuccess){
+		fprintf(stderr, "Failed to record stop event (error code %s)!\n", cudaGetErrorString(cudaStatus));
+		exit(EXIT_FAILURE);}
+	if ((cudaStatus = cudaEventSynchronize(stop)) != cudaSuccess){
+		fprintf(stderr, "Failed to synchronize on the stop event (error code %s)!\n", cudaGetErrorString(cudaStatus));
+		exit(EXIT_FAILURE);}
+	float msecTotal = 0.0f;
+	if ((cudaStatus = cudaEventElapsedTime(&msecTotal, start, stop)) != cudaSuccess){
+		fprintf(stderr, "Failed to get time elapsed between events (error code %s)!\n", cudaGetErrorString(cudaStatus));
+		exit(EXIT_FAILURE);}
+
+	// Compute and print the performance
+	float msecPerVectorSum = msecTotal / iter;
+	double flopsPeVectorSum = size;
+	double gigaFlops = (flopsPeVectorSum * 1.0e-9f) / (msecPerVectorSum / 1000.0f);
+	printf(
+		"Performance= %.2f GFlop/s, Time= %.3f msec, Size= %.0f Ops, WorkgroupSize= %u threads/block\n",
+		gigaFlops,
+		msecPerVectorSum,
+		flopsPeVectorSum,
+		threads);
+
     // cudaDeviceSynchronize waits for the kernel to finish, and returns
     // any errors encountered during the launch.
     cudaStatus = cudaDeviceSynchronize();

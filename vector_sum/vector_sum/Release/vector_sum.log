@@ -5,16 +5,18 @@ C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(98): 
 C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(117): warning : transfer of control bypasses initialization of:
 C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(123): warning : transfer of control bypasses initialization of:
 C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(130): warning : transfer of control bypasses initialization of:
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(162): warning : transfer of control bypasses initialization of:
 C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(98): warning : transfer of control bypasses initialization of:
 C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(117): warning : transfer of control bypasses initialization of:
 C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(123): warning : transfer of control bypasses initialization of:
 C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(130): warning : transfer of control bypasses initialization of:
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(162): warning : transfer of control bypasses initialization of:
 CUDACOMPILE : nvcc warning : The 'compute_20', 'sm_20', and 'sm_21' architectures are deprecated, and may be removed in a future release (Use -Wno-deprecated-gpu-targets to suppress warning).
   kernel.cu
 C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(58): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(165): warning C4533: initialization of 'grid' is skipped by 'goto Error'
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(202): warning C4533: initialization of 'grid' is skipped by 'goto Error'
   C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(135): note: see declaration of 'grid'
-  C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(165): note: see declaration of 'Error'
+  C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(202): note: see declaration of 'Error'
   LINK : /LTCG specified but no code generation required; remove /LTCG from the link command line to improve linker performance
   vector_sum.vcxproj -> C:\Users\no-one\parallel_processing_OpenMP\vector_sum\Release\vector_sum.exe
   vector_sum.vcxproj -> C:\Users\no-one\parallel_processing_OpenMP\vector_sum\Release\vector_sum.pdb (Full PDB)
