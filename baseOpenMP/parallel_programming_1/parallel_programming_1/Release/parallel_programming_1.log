@@ -1,10 +1,5 @@
-﻿  line_lenght.cpp
-..\..\line_lenght.cpp(21): warning C4101: 'times': unreferenced local variable
-..\..\line_lenght.cpp(15): warning C4101: 'x': unreferenced local variable
-  Generating code
-  2 of 8 functions (25.0%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+﻿  Generating code
+  All 20 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
   parallel_programming_1.vcxproj -> C:\Users\no-one\parallel_processing_OpenMP\baseOpenMP\parallel_programming_1\Release\parallel_programming_1.exe
   parallel_programming_1.vcxproj -> C:\Users\no-one\parallel_processing_OpenMP\baseOpenMP\parallel_programming_1\Release\parallel_programming_1.pdb (Full PDB)
