@@ -27,107 +27,73 @@ int main(int argc, char* argv[])
 	for (i = 0; i < calc_count; i++) {
 		sumTable[i] = 0;
 		sumTable[i + 1] = 0;
-		sum = 0;
 		start = clock();
 
 		#pragma omp parallel private(x) shared(sumTable)
 		{
 			int th_num = omp_get_thread_num();
-			HANDLE thread_handler = GetCurrentThread();
-			DWORD_PTR mask = (1 << (th_num % 2));
-
-			DWORD_PTR result = SetThreadAffinityMask(thread_handler, mask);
-		   #pragma omp for schedule(static,1)
-		   for (int j=0; j<num_steps; j++)
-		   {
-			  x = (j + .5)*step;
-			  sumTable[i+th_num] += 4.0/(1.+ x*x);
-		   }
-		}
-
-		sum = sumTable[i]+sumTable[i+1];
-
-		pi = sum*step;
-		stop = clock();
-		times[i] = ((double)stop-start)/CLOCKS_PER_SEC;
-	 }
-	for (i = 0; i<calc_count; i++) std::cout << times[i] << std::endl;
-	 
-
-
-	 //WERSJA 2
-	/*
-	for (i = 0; i < calc_count; i++) {
-		sumTable[i] = 0;
-		sumTable[i + 1] = 0;
-#pragma omp parallel private(start,stop) shared(sumTable)
-		{
-			start = clock();
-			int th_num = omp_get_thread_num();
-
-			for (int j = 0; j < num_steps; j++)
+			for (int j=0; j<num_steps; j++)
 			{
-				x = (j + .5)*step;
-				sumTable[i + th_num] += 4.0 / (1. + x*x);
+			  x = (j + .5)*step;
+			  sumTable[i+ th_num] += 4.0/(1.+ x*x);
 			}
-
-			pi = sumTable[i + th_num] * step;
-			stop = clock();
-			times[i + th_num] = ((double)stop - start) / CLOCKS_PER_SEC;
-		}
-		printf("time1: %f,time2: %f\n", times[i], times[i + 1]);
-	}*/
-
+		}	
+		pi = step*sumTable[i];
+		stop = clock();
+		std::cout << ((double)stop - start) / CLOCKS_PER_SEC << std::endl;
+	 }
 
 	printf("Wartosc liczby PI wynosi %15.12f\n", pi);
 	getchar();
 	return 0;
 
+	/*
+	2.563
+	2.746
+	2.479
+	2.488
+	2.426
+	1.298
+	2.586
+	2.596
+	2.585
+	2.616
+	2.598
+	2.618
+	2.578
+	1.465
+	2.43
+	2.455
+	2.409
+	2.402
+	2.423
+	2.398
+		
+	Wartosc liczby PI wynosi  3.141592653590
+	*/
+	//Długość lini: 8słów, double: 8B => 64B*/
 
-	/**
-	WERSJA 2:
-	time1: 3.756000,time2: 3.787000
-	time1: 3.554000,time2: 3.557000
-	time1: 3.445000,time2: 3.478000
-	time1: 3.384000,time2: 3.426000
-	time1: 3.524000,time2: 3.517000
-	time1: 1.813000,time2: 1.840000 XXX
-	time1: 3.521000,time2: 3.539000
-	time1: 3.538000,time2: 3.569000
-	time1: 3.562000,time2: 3.602000
-	time1: 3.430000,time2: 3.439000
-	time1: 3.777000,time2: 3.772000
-	time1: 3.776000,time2: 3.768000
-	time1: 3.229000,time2: 3.240000
-	time1: 1.827000,time2: 1.749000 XXX
-	time1: 3.687000,time2: 3.658000
-	time1: 3.306000,time2: 3.272000
-	time1: 3.801000,time2: 3.803000
-	time1: 3.648000,time2: 3.662000
-	time1: 3.700000,time2: 3.704000
-	time1: 3.566000,time2: 3.568000
 
-	WERSJA 1:
-		1.063
-		0.759 XXX
-		1.048
-		1.046
-		1.057
-		1.046
-		1.057
-		1.05
-		1.045
-		0.756 XXX
-		1.042
-		1.05
-		1.051
-		1.043
-		1.053
-		1.05
-		1.034
-		0.756 XXX
-		1.05
-		1.046
-
-		Długość lini: 8słów, double: 8B => 64B*/
+	/*
+	1.53
+	1.744
+	1.527
+	1.627
+	1.542
+	0.838
+	1.402
+	1.35
+	1.267
+	1.198
+	1.268
+	1.321
+	1.23
+	0.855
+	1.213
+	1.236
+	1.306
+	1.212
+	1.19
+	1.249
+	*/
 }

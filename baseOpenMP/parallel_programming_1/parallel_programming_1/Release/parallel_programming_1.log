@@ -1,9 +1,8 @@
 ﻿  line_lenght.cpp
+..\..\line_lenght.cpp(21): warning C4101: 'times': unreferenced local variable
 ..\..\line_lenght.cpp(15): warning C4101: 'x': unreferenced local variable
-  Optimal_with_mask.cpp
-Optimal_with_mask.cpp(19): warning C4101: 'x': unreferenced local variable
   Generating code
-  3 of 8 functions (37.5%) were compiled, the rest were copied from previous compilation.
+  2 of 8 functions (25.0%) were compiled, the rest were copied from previous compilation.
     1 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code

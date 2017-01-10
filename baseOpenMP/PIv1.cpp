@@ -3,7 +3,7 @@
 #include <time.h>
 #include <omp.h>
 
-int main1(int argc, char* argv[])
+int main3434(int argc, char* argv[])
 {
 	long long num_steps = 100000000;
 	double step;
