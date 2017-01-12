@@ -66,8 +66,10 @@ int main()
     float c[1] = { 0 };
 
     // Sum vector parallel.
-	int type = 3;
+	int type = 1;
     cudaError_t cudaStatus = sumWithCuda(c, a, arraySize, type);
+	cudaStatus = sumWithCuda(c, a, arraySize, 2);
+	cudaStatus = sumWithCuda(c, a, arraySize, 3);
     if (cudaStatus != cudaSuccess) {
         fprintf(stderr, "addWithCuda failed!");
 		getchar();
@@ -87,7 +89,7 @@ int main()
         return 1;
     }
 
-	getchar();
+	//getchar();
     return 0;
 }
 
@@ -160,7 +162,6 @@ cudaError_t sumWithCuda(float *c, float *a, unsigned int size, int type)
 		if (type == 1)sumKernelStr1<block_size> << <grid, threads >> > (dev_c, dev_a);
 		if (type == 2)sumKernelStr2<block_size><< <grid, threads >> > (dev_c, dev_a);
 		if (type == 3)sumKernelStr3<block_size><< <grid, threads >> > (dev_c, dev_a);
-		sumKernelStr1<block_size> << <grid, threads >> > (dev_c, dev_a);
 		while (grid > 1) {
 			if (grid > block_size) grid /= block_size;
 			else {
