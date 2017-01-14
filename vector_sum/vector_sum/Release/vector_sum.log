@@ -1,4 +1,21 @@
-﻿  vector_sum.vcxproj -> C:\Users\no-one\parallel_processing_OpenMP\vector_sum\Release\vector_sum.exe
+﻿  Compiling CUDA source file kernel.cu...
+  
+  C:\Users\no-one\parallel_processing_OpenMP\vector_sum\vector_sum>"F:\NVIDIA\dev\bin\nvcc.exe" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2015 -ccbin "F:\VS\VC\bin"  -IF:\NVIDIA\dev\include -IF:\NVIDIA\dev\include     --keep-dir Release -maxrregcount=0  --machine 32 --compile -cudart static     -DWIN32 -DNDEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /O2 /FS /Zi  /MD " -o Release\kernel.cu.obj "C:\Users\no-one\parallel_processing_OpenMP\vector_sum\vector_sum\kernel.cu" 
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(95): warning : transfer of control bypasses initialization of:
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(117): warning : transfer of control bypasses initialization of:
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(123): warning : transfer of control bypasses initialization of:
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(130): warning : transfer of control bypasses initialization of:
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(165): warning : transfer of control bypasses initialization of:
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(95): warning : transfer of control bypasses initialization of:
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(117): warning : transfer of control bypasses initialization of:
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(123): warning : transfer of control bypasses initialization of:
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(130): warning : transfer of control bypasses initialization of:
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(165): warning : transfer of control bypasses initialization of:
+CUDACOMPILE : nvcc warning : The 'compute_20', 'sm_20', and 'sm_21' architectures are deprecated, and may be removed in a future release (Use -Wno-deprecated-gpu-targets to suppress warning).
+  kernel.cu
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(53): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  LINK : /LTCG specified but no code generation required; remove /LTCG from the link command line to improve linker performance
+  vector_sum.vcxproj -> C:\Users\no-one\parallel_processing_OpenMP\vector_sum\Release\vector_sum.exe
   vector_sum.vcxproj -> C:\Users\no-one\parallel_processing_OpenMP\vector_sum\Release\vector_sum.pdb (Full PDB)
   copy "F:\NVIDIA\dev\bin\cudart*.dll" "C:\Users\no-one\parallel_processing_OpenMP\vector_sum\Release\"
   F:\NVIDIA\dev\bin\cudart32_80.dll

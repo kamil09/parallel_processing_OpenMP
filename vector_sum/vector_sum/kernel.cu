@@ -7,35 +7,24 @@
 #include <ctime>
 #include <stdlib.h>
 
-const int arraySize = 2048*4;
-const int block_size = 512;
+const int arraySize = 1024*8;
+const int block_size = 256;
 cudaError_t sumWithCuda(float *c, float *a, unsigned int size, int type);
 
-template <int BLOCK_SIZE> __global__ void sumKernelStr1(float *c, float *a){
-	__shared__ float sdata[BLOCK_SIZE];
-	unsigned int tid = threadIdx.x;
-	unsigned int i = blockIdx.x * blockDim.x + threadIdx.x;
-
-	sdata[tid] = a[i];
-	__syncthreads();
-	for (unsigned int odstep = 1; odstep < blockDim.x; odstep *= 2){
-		if (tid %(2*odstep) == 0) sdata[tid] += sdata[tid + odstep];
-		__syncthreads();
-	}
-	if (tid == 0) c[blockIdx.x] = sdata[0];
-}
-
 template <int BLOCK_SIZE> __global__ void sumKernelStr2(float *c, float*a) {
-	__shared__ float sdata[BLOCK_SIZE];
-	unsigned int tid = threadIdx.x;
-	unsigned int i = blockIdx.x * blockDim.x + threadIdx.x;
+	__shared__ float sdata[BLOCK_SIZE*2];
+	unsigned int tid = 2*threadIdx.x;
+	unsigned int i = blockIdx.x * 2*blockDim.x + 2*threadIdx.x;
 
 	sdata[tid] = a[i];
+	sdata[tid + 1] = a[i + 1];
 	__syncthreads();
 
-	for (unsigned int odstep = 1; odstep < blockDim.x; odstep *= 2) {
-		int index = 2 * odstep*tid;
-		if (index < blockDim.x) sdata[index] += sdata[index + odstep];
+	for (unsigned int odstep = 1; odstep < 2*blockDim.x; odstep *= 2) {
+		int index = odstep*tid;
+		if (index < 2*blockDim.x) {
+			sdata[index] += sdata[index + odstep];
+		}
 		__syncthreads();
 	}
 
@@ -43,14 +32,15 @@ template <int BLOCK_SIZE> __global__ void sumKernelStr2(float *c, float*a) {
 }
 
 template <int BLOCK_SIZE> __global__ void sumKernelStr3(float *c, float *a) {
-	__shared__ float sdata[BLOCK_SIZE];
+	__shared__ float sdata[BLOCK_SIZE * 2];
 	unsigned int tid = threadIdx.x;
-	unsigned int i = blockIdx.x * blockDim.x + threadIdx.x;
+	unsigned int i = blockIdx.x * 2*blockDim.x + threadIdx.x;
 
 	sdata[tid] = a[i];
+	sdata[tid + blockDim.x] = a[i + blockDim.x];
 	__syncthreads();
 
-	for (unsigned int odstep = blockDim.x / 2; odstep > 0; odstep /= 2) {
+	for (unsigned int odstep = blockDim.x; odstep > 0; odstep /= 2) {
 		if (tid < odstep) sdata[tid] += sdata[tid + odstep];
 
 		__syncthreads();
@@ -66,9 +56,7 @@ int main()
     float c[1] = { 0 };
 
     // Sum vector parallel.
-	int type = 1;
-    cudaError_t cudaStatus = sumWithCuda(c, a, arraySize, type);
-	cudaStatus = sumWithCuda(c, a, arraySize, 2);
+    cudaError_t cudaStatus = sumWithCuda(c, a, arraySize, 2);
 	cudaStatus = sumWithCuda(c, a, arraySize, 3);
     if (cudaStatus != cudaSuccess) {
         fprintf(stderr, "addWithCuda failed!");
@@ -118,10 +106,9 @@ cudaError_t sumWithCuda(float *c, float *a, unsigned int size, int type)
 	else printf("GPU Device %d: \"%s\" with compute capability %d.%d MP:%d TH_MUL:%d TH:%d WARP:%d SH_MEM_BLOCK:%d\n\n", 0, 
 		deviceProp.name, deviceProp.major, deviceProp.minor, deviceProp.multiProcessorCount, deviceProp.maxThreadsPerMultiProcessor, deviceProp.maxThreadsPerBlock, deviceProp.warpSize, deviceProp.sharedMemPerBlock);
 	
-	int threads = size;
-	if (size>block_size) threads = block_size;
-	//printf("%d\n",threads);
-	int grid =size/threads;
+	int threads = size/2;
+	if (size>2*block_size) threads = block_size;
+	int grid = size/threads/2;
 
     // Allocate GPU buffers for 2 vectors (1 input, 1 output).
     cudaStatus = cudaMalloc((void**)&dev_c, size / threads * sizeof(float));
@@ -143,7 +130,6 @@ cudaError_t sumWithCuda(float *c, float *a, unsigned int size, int type)
         goto Error;
     }
 	
-
 	// Allocate CUDA events that we'll use for timing
 	cudaEvent_t start;
 	cudaEvent_t stop;
@@ -159,16 +145,14 @@ cudaError_t sumWithCuda(float *c, float *a, unsigned int size, int type)
 	}
 	int iter = 1;
 	for (int i = 0; i < iter; i++) {
-		if (type == 1)sumKernelStr1<block_size> << <grid, threads >> > (dev_c, dev_a);
 		if (type == 2)sumKernelStr2<block_size><< <grid, threads >> > (dev_c, dev_a);
 		if (type == 3)sumKernelStr3<block_size><< <grid, threads >> > (dev_c, dev_a);
 		while (grid > 1) {
-			if (grid > block_size) grid /= block_size;
+			if (grid > 2*block_size) grid /= (block_size*2);
 			else {
-				threads = grid;
+				threads = grid/2;
 				grid = 1;
 			}
-			if (type == 1)sumKernelStr1<block_size> << <grid, threads >> > (dev_c, dev_c);
 			if (type == 2)sumKernelStr2<block_size> << <grid, threads >> > (dev_c, dev_c);
 			if (type == 3)sumKernelStr3<block_size> << <grid, threads >> > (dev_c, dev_c);
 		}
