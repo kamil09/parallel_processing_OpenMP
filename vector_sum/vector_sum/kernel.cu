@@ -7,8 +7,8 @@
 #include <ctime>
 #include <stdlib.h>
 
-const int arraySize = 1024*8;
-const int block_size = 256;
+const int arraySize = 1024*1024;
+const int block_size = 1024;
 cudaError_t sumWithCuda(float *c, float *a, unsigned int size, int type);
 
 template <int BLOCK_SIZE> __global__ void sumKernelStr2(float *c, float*a) {
@@ -51,7 +51,7 @@ template <int BLOCK_SIZE> __global__ void sumKernelStr3(float *c, float *a) {
 int main()
 {
 	srand(time(NULL));
-	float a[arraySize];
+	float *a = (float*)malloc(sizeof(float)*arraySize);
 	for (int i = 0; i < arraySize; i++) a[i] = (float)(rand() % 20);
     float c[1] = { 0 };
 
@@ -64,7 +64,7 @@ int main()
         return 1;
     }
 	//for (int i = 0; i < arraySize; i++) printf("+%f", a[i]);
-    printf("=%f\n",c[0]);
+    //printf("=%f\n",c[0]);
 	for (int i = 1; i < arraySize; i++) a[0] += a[i];
 	if (a[0] != c[0]) printf("DUPA! %f!=%f",a[0],c[0]);
 
@@ -76,7 +76,7 @@ int main()
 		getchar();
         return 1;
     }
-
+	free(a);
 	//getchar();
     return 0;
 }
@@ -103,11 +103,13 @@ cudaError_t sumWithCuda(float *c, float *a, unsigned int size, int type)
 		exit(EXIT_SUCCESS);
 	}
 	if (cudaStatus != cudaSuccess) printf("cudaGetDeviceProperties returned error code %d, line(%d)\n", cudaStatus, __LINE__);
-	else printf("GPU Device %d: \"%s\" with compute capability %d.%d MP:%d TH_MUL:%d TH:%d WARP:%d SH_MEM_BLOCK:%d\n\n", 0, 
-		deviceProp.name, deviceProp.major, deviceProp.minor, deviceProp.multiProcessorCount, deviceProp.maxThreadsPerMultiProcessor, deviceProp.maxThreadsPerBlock, deviceProp.warpSize, deviceProp.sharedMemPerBlock);
+	else printf("GPU Device %d: \"%s\" with compute capability %d.%d MP:%d TH_MUL:%d TH:%d WARP:%d SH_MEM_BLOCK:%d %d\n\n", 0, 
+		deviceProp.name, deviceProp.major, deviceProp.minor, deviceProp.multiProcessorCount, deviceProp.maxThreadsPerMultiProcessor, deviceProp.maxThreadsPerBlock, deviceProp.warpSize, deviceProp.sharedMemPerBlock, deviceProp.maxGridSize
+	);
 	
 	int threads = size/2;
-	if (size>2*block_size) threads = block_size;
+	if (size
+>2*block_size) threads = block_size;
 	int grid = size/threads/2;
 
     // Allocate GPU buffers for 2 vectors (1 input, 1 output).
@@ -186,7 +188,7 @@ cudaError_t sumWithCuda(float *c, float *a, unsigned int size, int type)
 		msecPerVectorSum,
 		flopsPeVectorSum,
 		threads);
-
+		
     // cudaDeviceSynchronize waits for the kernel to finish, and returns
     // any errors encountered during the launch.
     cudaStatus = cudaDeviceSynchronize();
