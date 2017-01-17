@@ -7,7 +7,10 @@
 #include <ctime>
 #include <stdlib.h>
 
-const int arraySize = 1024*1024;
+//const int arraySize = 1024 * 128;
+//const int arraySize = 1024 * 256;
+//const int arraySize = 1024 * 512;
+const int arraySize = 1024 * 1024;
 const int block_size = 1024;
 cudaError_t sumWithCuda(float *c, float *a, unsigned int size, int type);
 
