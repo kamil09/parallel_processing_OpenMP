@@ -1,20 +1,20 @@
 ﻿  Compiling CUDA source file kernel.cu...
   
   C:\Users\no-one\parallel_processing_OpenMP\vector_sum\vector_sum>"F:\NVIDIA\dev\bin\nvcc.exe" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2015 -ccbin "F:\VS\VC\bin"  -IF:\NVIDIA\dev\include -IF:\NVIDIA\dev\include     --keep-dir Release -maxrregcount=0  --machine 32 --compile -cudart static     -DWIN32 -DNDEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /O2 /FS /Zi  /MD " -o Release\kernel.cu.obj "C:\Users\no-one\parallel_processing_OpenMP\vector_sum\vector_sum\kernel.cu" 
-C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(98): warning : transfer of control bypasses initialization of:
-C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(122): warning : transfer of control bypasses initialization of:
-C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(128): warning : transfer of control bypasses initialization of:
-C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(135): warning : transfer of control bypasses initialization of:
-C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(170): warning : transfer of control bypasses initialization of:
-C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(98): warning : transfer of control bypasses initialization of:
-C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(122): warning : transfer of control bypasses initialization of:
-C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(128): warning : transfer of control bypasses initialization of:
-C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(135): warning : transfer of control bypasses initialization of:
-C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(170): warning : transfer of control bypasses initialization of:
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(102): warning : transfer of control bypasses initialization of:
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(126): warning : transfer of control bypasses initialization of:
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(132): warning : transfer of control bypasses initialization of:
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(139): warning : transfer of control bypasses initialization of:
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(174): warning : transfer of control bypasses initialization of:
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(102): warning : transfer of control bypasses initialization of:
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(126): warning : transfer of control bypasses initialization of:
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(132): warning : transfer of control bypasses initialization of:
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(139): warning : transfer of control bypasses initialization of:
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(174): warning : transfer of control bypasses initialization of:
 CUDACOMPILE : nvcc warning : The 'compute_20', 'sm_20', and 'sm_21' architectures are deprecated, and may be removed in a future release (Use -Wno-deprecated-gpu-targets to suppress warning).
   kernel.cu
-C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(56): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(109): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 10 has type 'int *'
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(60): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:/Users/no-one/parallel_processing_OpenMP/vector_sum/vector_sum/kernel.cu(113): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 10 has type 'int *'
   LINK : /LTCG specified but no code generation required; remove /LTCG from the link command line to improve linker performance
   vector_sum.vcxproj -> C:\Users\no-one\parallel_processing_OpenMP\vector_sum\Release\vector_sum.exe
   vector_sum.vcxproj -> C:\Users\no-one\parallel_processing_OpenMP\vector_sum\Release\vector_sum.pdb (Full PDB)

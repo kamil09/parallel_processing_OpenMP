@@ -1,0 +1,11 @@
+Name,Start Time(ns),Duration(ns),GridX,GridY,GridZ,BlockX,BlockY,BlockZ,Registers/Thread,Static Shared Memory,Dynamic Shared Memory,Size(bytes),Throughput(bytes/sec),Global Load Throughput(bytes/sec),Global Memory Load Efficiency(%),Eligible Warps Per Active Cycle,Global Memory Store Efficiency(%),FLOP Efficiency(Peak Single)(%),Instructions Executed,Shared Memory Efficiency(%),Instructions per warp,Executed IPC,Multiprocessor Activity(%),Achieved Occupancy,Executed Load/Store Instructions,Shared Memory Store Throughput(bytes/sec),FP Instructions(Single),Shared Memory Load Throughput(bytes/sec),Shared Memory Store Transactions Per Request,Shared Memory Load Transactions Per Request,gld request,shared store,shared load,gst request,shared bank conflict,instructions executed
+"Memcpy HtoD [sync]",94013929,81021,,,,,,,,,,524288,6471013687,,,,,,,,,,,,,,,,,,,,,,,
+"void sumKernelStr2<int=128>(float*, float*)",94098669,297989,512,1,1,128,1,1,8,1024,0,,,3913166468,50,2.63,12.5,0.622,257536,21.292,125.75,1.195,98.931,0.638,74752,13451509734,130560,23234425905,3.438,3.8,4096,8192,12800,512,53760,257536
+"void sumKernelStr2<int=128>(float*, float*)",94397488,4629,2,1,1,128,1,1,8,1024,0,,,769924812,50,0.356,12.5,0.088,1006,21.292,125.75,0.297,61.244,0.166,292,2646616541,510,4571428571,3.438,3.8,16,32,50,2,210,1006
+"void sumKernelStr2<int=128>(float*, float*)",94402951,1262,1,1,1,1,1,1,8,1024,0,,,92485549,3.125,0.025,12.5,0,37,3.125,37,0.034,37.627,0.021,10,138728323,1,138728323,1.5,1,2,2,3,1,0,37
+"Memcpy DtoH [sync]",94525237,1280,,,,,,,,,,4,3125000,,,,,,,,,,,,,,,,,,,,,,,
+"Memcpy HtoD [sync]",98028935,81085,,,,,,,,,,524288,6465906147,,,,,,,,,,,,,,,,,,,,,,,
+"void sumKernelStr3<int=128>(float*, float*)",98113034,212384,512,1,1,128,1,1,8,1024,0,,,3061517888,100,3.668,12.5,0.971,228864,70.972,111.75,1.66,98.656,0.623,76800,7653794722,130560,9567243402,1,1,4096,10240,12800,512,0,228864
+"void sumKernelStr3<int=128>(float*, float*)",98326250,3014,2,1,1,128,1,1,8,1024,0,,,535564853,100,0.419,12.5,0.113,894,70.972,111.75,0.428,50.53,0.165,300,1338912133,510,1673640167,1,1,16,40,50,2,0,894
+"void sumKernelStr3<int=128>(float*, float*)",98330101,1230,1,1,1,1,1,1,8,1024,0,,,101265822,3.125,0.025,12.5,0,37,3.125,37,0.035,36.977,0.021,11,151898734,1,151898734,1,1,2,3,3,1,0,37
+"Memcpy DtoH [sync]",98422999,1280,,,,,,,,,,4,3125000,,,,,,,,,,,,,,,,,,,,,,,

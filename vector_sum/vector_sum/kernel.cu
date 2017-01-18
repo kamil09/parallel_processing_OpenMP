@@ -11,6 +11,10 @@
 //const int arraySize = 1024 * 256;
 //const int arraySize = 1024 * 512;
 const int arraySize = 1024 * 1024;
+
+//const int block_size = 32;
+//const int block_size = 128;
+//const int block_size = 512;
 const int block_size = 1024;
 cudaError_t sumWithCuda(float *c, float *a, unsigned int size, int type);
 
